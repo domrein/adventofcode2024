@@ -8,4 +8,11 @@ describe("index", () => {
 
     expect(index.calcDist(list1, list2)).toEqual(11);
   });
+
+  test("calcSimilarity", () => {
+    const list1 = [3, 4, 2, 1, 3, 3];
+    const list2 = [4, 3, 5, 3, 9, 3];
+
+    expect(index.calcSimilarity(list1, list2)).toEqual(31);
+  });
 });
