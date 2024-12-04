@@ -68,7 +68,6 @@ const parseLists = async (): Promise<number[][]> => {
 export default {
   calcDist,
   calcSimilarity,
-  parseLists,
 }
 
 let [list1, list2] = await parseLists();
