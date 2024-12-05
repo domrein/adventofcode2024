@@ -1,28 +1,54 @@
+const isSafe = (report: number[]) => {
+  let safe = true;
+  let ordering = 0; // 0 = unknown, 1 = ascending, 2 = descending
+  for (let j = 0; j < report.length - 1; j++) {
+    const val = report[j];
+    const nextVal = report[j + 1];
+    const distance = nextVal - val;
+    if (Math.abs(distance) > 3 || distance === 0) {
+      safe = false;
+    }
+    if (ordering === 1 && distance < 0) {
+      safe = false;
+    }
+    if (ordering === 2 && distance > 0) {
+      safe = false;
+    }
+    if (!ordering && distance > 0) {
+      ordering = 1;
+    }
+    if (!ordering && distance < 0) {
+      ordering = 2;
+    }
+  }
+
+  return safe;
+};
+
 const countSafe = (reports: number[][]) => {
   let safeCount = 0;
   for (let i = 0; i < reports.length; i++) {
     const report = reports[i];
-    let safe = true;
-    let ordering = 0; // 0 = unknown, 1 = ascending, 2 = descending
-    for (let j = 0; j < report.length - 1; j++) {
-      const val = report[j];
-      const nextVal = report[j + 1];
-      const distance = nextVal - val;
-      if (Math.abs(distance) > 3 || distance === 0) {
-        safe = false;
+    if (isSafe(report)) {
+      safeCount++;
+    }
+  }
+
+  return safeCount;
+};
+
+const countDampenedSafe = (reports: number[][]): number => {
+  let safeCount = 0;
+  for (let i = 0; i < reports.length; i++) {
+    const report = reports[i];
+    let safe = isSafe(report);
+    for (let j = 0; j < report.length; j++) {
+      if (safe) {
+        break;
       }
-      if (ordering === 1 && distance < 0) {
-        safe = false;
-      }
-      if (ordering === 2 && distance > 0) {
-        safe = false;
-      }
-      if (!ordering && distance > 0) {
-        ordering = 1;
-      }
-      if (!ordering && distance < 0) {
-        ordering = 2;
-      }
+      let r = [...report];
+      r.splice(j, 1);
+      safe = isSafe(r);
     }
     if (safe) {
       safeCount++;
@@ -62,7 +88,11 @@ const parseReports = async (): Promise<number[][]> => {
 
 export default {
   countSafe,
+  countDampenedSafe,
 }
 
 let list = await parseReports();
 console.log(`safe reports: ${countSafe(list)}`);
+
+list = await parseReports();
+console.log(`safe reports: ${countDampenedSafe(list)}`);
