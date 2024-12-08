@@ -34,4 +34,10 @@ describe("code", () => {
     const sum = code.sumSolvableEquations(equations);
     expect(sum).toEqual(3749);
   });
+
+  test("sumSolvableEquations2", () => {
+    const equations = code.parseEquations(input);
+    const sum = code.sumSolvableEquations2(equations);
+    expect(sum).toEqual(11387);
+  });
 });

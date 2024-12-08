@@ -59,4 +59,46 @@ export default {
 
     return total;
   },
+
+  sumSolvableEquations2(equations: {left: number, right: number[]}[]): number {
+    let total = 0;
+    for (let i = 0; i < equations.length; i++) {
+      const equation = equations[i];
+      for (let j = 0; j < 3 ** (equation.right.length - 1); j++) {
+        const operands = [];
+        const base3 = j.toString(3).padStart(equation.right.length - 1, "0");
+        for (let k = 0; k < equation.right.length - 1; k++) {
+          const val = base3[k];
+          if (val === "0") {
+            operands.push("+");
+          }
+          else if (val === "1") {
+            operands.push("*");
+          }
+          else {
+            operands.push("|");
+          }
+        }
+        const right = [...equation.right];
+        let sum = right[0];
+        for (let k = 0; k < operands.length; k++) {
+          if (operands[k] === "+") {
+            sum += right[k+1];
+          }
+          else if (operands[k] === "*") {
+            sum *= right[k+1];
+          }
+          else {
+            sum = Number.parseInt(`${sum}${right[k+1]}`);
+          }
+        }
+        if (sum === equation.left) {
+          total += equation.left;
+          break;
+        }
+      }
+    }
+
+    return total;
+  },
 }

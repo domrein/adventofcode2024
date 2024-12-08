@@ -9,3 +9,6 @@ const loadInput = async (): Promise<string> => {
 const equations = code.parseEquations(await loadInput());
 const sum = code.sumSolvableEquations(equations);
 console.log(`sum: ${sum}`);
+
+const sum2 = code.sumSolvableEquations2(equations);
+console.log(`sum2: ${sum2}`);
