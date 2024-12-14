@@ -57,4 +57,10 @@ describe("code", () => {
     const checksum = code.generateChecksum(map);
     expect(checksum).toEqual(BigInt(1928));
   });
+
+  test("generateChecksumBlock", () => {
+    const mapBlock = code.parseMap(input);
+    const checksumBlock = code.generateChecksumBlock(mapBlock);
+    expect(checksumBlock).toEqual(BigInt(2858));
+  });
 });

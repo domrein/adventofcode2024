@@ -61,4 +61,57 @@ export default {
 
     return sum;
   },
+
+  generateChecksumBlock(map: number[]): BigInt {
+    let sum = BigInt(0);
+
+    let end = map.length - 1;
+    while (end >= 0) {
+      while (map[end] === -1) {
+        end--;
+      }
+
+      // identify next block
+      let blockVal = map[end];
+      let blockLength = 1;
+      for (let i = end - 1; i >= 0; i--) {
+        if (map[i] !== blockVal) {
+          break;
+        }
+        blockLength++;
+      }
+
+      // see where block fits
+      for (let i = 0; i < end - blockLength; i++) {
+        if (map[i] === -1) {
+          let openBlock = true;
+          for (let j = 0; j < blockLength; j++) {
+            if (map[j + i] !== -1) {
+              openBlock = false;
+            }
+          }
+          if (openBlock) {
+            for (let j = 0; j < blockLength; j++) {
+              map[j + i] = blockVal;
+            }
+            for (let j = 0; j < blockLength; j++) {
+              map[end-j] = -1;
+            }
+
+            break;
+          }
+        }
+      }
+      end -= blockLength;
+    }
+
+    sum = map.reduce((a, b, c) => {
+      if (b === -1) {
+        return a;
+      }
+      return a + BigInt(b) * BigInt(c);
+  }, BigInt(0));
+
+    return sum;
+  },
 }
